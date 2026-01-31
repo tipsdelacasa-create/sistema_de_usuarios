@@ -1,0 +1,25 @@
+#head {
+    display: grid;
+    grid-template-columns: 4fr auto auto;
+    height: 120px;
+}
+
+#head {
+    background-color: rgb(213, 220, 220);
+}
+
+button {
+    font-size: 14px;
+    border-radius: 6px;
+    background-color:  rgb(198, 210, 210);
+}
+
+#head button {
+    width: auto;
+    justify-self: center;
+}
+
+#head h1 {
+  justify-self: center; /* horizontal */
+  align-self: center;   /* vertical */
+}
