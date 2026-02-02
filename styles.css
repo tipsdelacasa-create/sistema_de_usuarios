@@ -1,6 +1,6 @@
 #head {
     display: grid;
-    grid-template-columns: 4fr auto auto;
+    grid-template-columns: 4fr auto auto auto;
     height: 120px;
 }
 
@@ -20,6 +20,15 @@ button {
 }
 
 #head h1 {
-  justify-self: center; /* horizontal */
-  align-self: center;   /* vertical */
+  justify-self: center;
+  align-self: center;  
 }
+
+#content {
+    padding: 20px;
+}
+
+button:hover{
+    background-color: rgb(159, 157, 157);
+}
+
