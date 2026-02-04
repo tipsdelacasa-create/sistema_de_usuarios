@@ -3,6 +3,10 @@ from pydantic import BaseModel
 import sqlite3
 import bcrypt
 
+class User(BaseModel):
+    usuario: str
+    contraseña: str
+
 app = FastAPI()
 
 
@@ -34,11 +38,10 @@ def comprobar_contraseña(usuario, password):
     (usuario,)
     )
     hash_a_comparar = cursor.fetchone()
-
+    conn.close()
     if hash_a_comparar:
         if bcrypt.checkpw(password.encode(), hash_a_comparar[0]):
             return {'respuesta':'OK'}
-    conn.close()
     return {'respuesta': 'Falta datos'}
     
 
@@ -46,12 +49,32 @@ def insertar_usuarios(password, usuario):
     hash_generado = hash_contraseña(password)
     conn, cursor = crear_conexion()
     try: 
-        cursor.execute("""
-        INSERT INTO users(username, password_hash)
-        VALUES(?, ?)"""
-        (usuario, hash_generado))
+        cursor.execute(
+        """INSERT INTO users(username, password_hash)
+        VALUES(?, ?)""",
+        (usuario, hash_generado)
+        )
         conn.commit()
         conn.close()
-        return {'respuesta':'Hecho correctamente'}
+        return {'respuesta':'OK'}
     except:
         return {'respuesta':'Usuario existente'}
+    
+crear_tabla()
+
+@app.post('/register')
+def login(body: User):
+    usuario = body.usuario
+    contraseña = body.contraseña
+
+    respuesta = insertar_usuarios(contraseña, usuario)
+    return respuesta
+
+@app.post('/login')
+def comprobar(body: User):
+    contraseña = body.contraseña
+    usuario = body.usuario
+
+    respuesta = comprobar_contraseña(usuario, contraseña)
+    return respuesta
+
