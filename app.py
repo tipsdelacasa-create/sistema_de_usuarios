@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 import sqlite3
 import bcrypt
+from fastapi.middleware.cors import CORSMiddleware
 
 class User(BaseModel):
     usuario: str
@@ -9,6 +10,13 @@ class User(BaseModel):
 
 app = FastAPI()
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://127.0.0.1:5500"],  # tu frontend
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 def crear_conexion():
     conn = sqlite3.connect('app.db')
